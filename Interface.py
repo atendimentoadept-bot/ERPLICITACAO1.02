@@ -5,7 +5,6 @@ import os
 import os                               # Para manipular caminhos de arquivos
 from docx import Document               # Biblioteca principal para ler/escrever .docx [cite: 1]
 from docx.shared import Pt              # Para ajustar tamanho de fontes, se necessário
-from docx2pdf import convert          # Para transformar o documento final em PDF
 from num2words import num2words        # Para converter números em extenso
 import io
 
@@ -872,3 +871,4 @@ elif pagina == "Formalizacao":
                 except Exception as e:
 
                     st.error(f"Erro na geração do documento: {e}")
+
