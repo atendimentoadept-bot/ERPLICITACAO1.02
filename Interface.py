@@ -2,11 +2,10 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 import os
-import os                               # Para manipular caminhos de arquivos
-from docx import Document               # Biblioteca principal para ler/escrever .docx [cite: 1]
-from docx.shared import Pt              # Para ajustar tamanho de fontes, se necessário
-from num2words import num2words        # Para converter números em extenso
 import io
+from docx import Document           # Para manipular o arquivo .docx
+from docx.shared import Pt          # Para formatação de fontes, se necessário
+from num2words import num2words     # Para converter valores em extenso
 
 try:
     dados_produtos=pd.read_csv("Base de Dados.csv",sep=";")
@@ -741,17 +740,18 @@ elif pagina == "Consultar Pedido":
                 st.info(f"**Observações:** {itens_pedido.iloc[0]['observacao']}")
         else:
             st.info("Selecione um pedido à esquerda para ver os detalhes.")
-# --- 9. TELA DE FORMALIZAÇÃO DE PROPOSTA (CORRIGIDA) ---
+# --- 9. TELA DE FORMALIZAÇÃO DE PROPOSTA (OTIMIZADA PARA WEB) ---
 elif pagina == "Formalizacao":
     st.title("Formalização de Proposta")
     
-    # 1. Carregamento e Padronização
+    import io  # Essencial para gerar arquivos na memória
+
+    # 1. Carregamento das Bases
     try:
         df_pedidos = pd.read_csv("Base_Pedido.csv", sep=";")
         df_produtos = pd.read_csv("Base de Dados.csv", sep=";")
         df_pessoas = pd.read_csv("Base_Pessoas.csv", sep=";")
         
-        # Conversão de tipos para garantir o cruzamento (merge)
         df_pedidos['id_pedido'] = df_pedidos['id_pedido'].astype(int)
         df_pedidos['sku_item'] = df_pedidos['sku_item'].astype(str)
         df_produtos['id_sku'] = df_produtos['id_sku'].astype(str)
@@ -762,76 +762,57 @@ elif pagina == "Formalizacao":
         st.error(f"Erro ao carregar bases: {e}")
         st.stop()
 
-    # 2. Seleção do Pedido
     id_escolhido = st.selectbox("Selecione o Número do Pedido", lista_pedidos, index=None, placeholder="Escolha um pedido...")
 
     if id_escolhido:
-        # Filtra dados do Pedido
         dados_venda = df_pedidos[df_pedidos["id_pedido"] == id_escolhido]
         doc_cliente = str(dados_venda.iloc[0]["doc_cliente"])
         
-        # AJUSTE NAS COLUNAS: Usando apenas o que existe no seu CSV (id_sku, descricao, marca, preco_custo)
         itens_completos = dados_venda.merge(
             df_produtos[['id_sku', 'descricao', 'marca', 'preco_custo']], 
             left_on='sku_item', right_on='id_sku', how='left'
         )
         
-        # Dados do Cliente
         cliente_info = df_pessoas[df_pessoas["id_documento"] == doc_cliente].iloc[0]
 
-        # --- PAINEL DE CONFERÊNCIA ---
+        # Painel de Conferência
         with st.container(border=True):
             st.subheader(f"Resumo: Pedido #{id_escolhido}")
             c1, c2 = st.columns(2)
             with c1:
                 st.write(f"**Razão Social:** {cliente_info['nome_razao']}")
                 st.write(f"**Data:** {dados_venda.iloc[0]['data_pedido']}")
-                st.caption(f"📍 {cliente_info['endereco']}, {cliente_info['numero']} - {cliente_info['cidade']}/{cliente_info['uf']}")
             with c2:
-                custo_total = (itens_completos['preco_custo'] * itens_completos['qtd']).sum()
-                # Soma subtotal dos itens + o frete único do pedido
                 venda_total = (itens_completos['valor_final'] * itens_completos['qtd']).sum() + float(dados_venda.iloc[0]['frete_total'])
                 st.metric("Total Venda (c/ Frete)", f"R$ {venda_total:.2f}")
-                st.write(f"**Custo Total Est.:** R$ {custo_total:.2f}")
-
-            # Exibição da Observação do Pedido
-            obs_pedido = dados_venda.iloc[0]['observacao']
-            if pd.notna(obs_pedido) and str(obs_pedido).lower() != 'nan':
-                st.warning(f"📝 **Observação do Pedido:** {obs_pedido}")
-
-            st.write("**Itens Selecionados:**")
-            st.dataframe(itens_completos[['sku_item', 'descricao', 'marca', 'qtd', 'valor_final']], use_container_width=True, hide_index=True)
 
         st.divider()
 
-        # 3. Inputs Manuais para o Documento
-        st.subheader("Dados Adicionais para Proposta_Modelo")
+        # 3. Inputs para o Documento
+        st.subheader("Dados Adicionais para a Proposta")
         with st.form("form_formalizacao"):
             f1, f2 = st.columns(2)
             with f1:
                 n_pregao = st.text_input("Nº do Pregão / Processo")
-                validade = st.text_input("Validade da Proposta (ex: 60 dias)")
+                validade = st.text_input("Validade da Proposta", value="60 dias")
             with f2:
-                prazo = st.text_input("Prazo de Entrega (ex: 15 dias úteis)")
+                prazo = st.text_input("Prazo de Entrega", value="15 dias úteis")
                 contato_doc = st.text_input("Pessoa de Contato", value=cliente_info['nome_razao'])
             
             especificacoes = st.text_area("Especificações Técnicas Solicitadas")
-            
-            botao_gerar = st.form_submit_button("Gerar Proposta (Word)", use_container_width=True)
+            botao_gerar = st.form_submit_button("Gerar e Preparar Download", use_container_width=True)
 
-        # 4. Geração do Word
+        # 4. Geração do Documento em Memória
         if botao_gerar:
             if not all([n_pregao, validade, prazo, especificacoes]):
-                st.error("Preencha todos os campos obrigatórios para gerar o documento.")
+                st.error("Preencha todos os campos para gerar o documento.")
             else:
                 try:
-                    from num2words import num2words
+                    # Carrega o modelo que está no seu GitHub
                     doc = Document("Proposta_Modelo.docx")
                     
-                    # Valor por extenso
                     valor_extenso = num2words(venda_total, lang='pt_BR', to='currency').upper()
 
-                    # Substituição de Tags
                     subs = {
                         "[Razao_UASG]": cliente_info['nome_razao'],
                         "[N_pregao]": n_pregao,
@@ -843,6 +824,7 @@ elif pagina == "Formalizacao":
                         "MIL QUINHENTOS E QUARENTA REAIS": valor_extenso
                     }
 
+                    # Substituição nos parágrafos
                     for p in doc.paragraphs:
                         for tag, val in subs.items():
                             if tag in p.text:
@@ -856,19 +838,27 @@ elif pagina == "Formalizacao":
                             cells[0].text = str(i + 1)
                             cells[1].text = str(it['descricao'])
                             cells[2].text = str(it['marca'])
-                            cells[3].text = "---" # PartNumber não existe no seu CSV, deixamos fixo ou vazio
+                            cells[3].text = "N/A"
                             cells[4].text = str(it['qtd'])
                             cells[5].text = f"R$ {it['valor_final']:.2f}"
                             cells[6].text = f"R$ {(it['valor_final'] * it['qtd']):.2f}"
 
-                    nome_final = f"Proposta_{id_escolhido}.docx"
-                    doc.save(nome_final)
+                    # --- O PULO DO GATO PARA O STREAMLIT CLOUD ---
+                    # Salva o arquivo em um objeto de bytes, não no disco rígido
+                    arquivo_memoria = io.BytesIO()
+                    doc.save(arquivo_memoria)
+                    arquivo_memoria.seek(0)
+
+                    st.success("✅ Proposta gerada com sucesso!")
                     
-                    with open(nome_final, "rb") as f:
-                        st.download_button("Baixar Proposta Gerada", f, file_name=nome_final)
-                    st.success("Documento gerado!")
+                    st.download_button(
+                        label="📥 Clique aqui para Baixar o Word",
+                        data=arquivo_memoria,
+                        file_name=f"Proposta_{id_escolhido}.docx",
+                        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                        use_container_width=True
+                    )
 
                 except Exception as e:
-
-                    st.error(f"Erro na geração do documento: {e}")
+                    st.error(f"Erro crítico na geração: {e}")
 
