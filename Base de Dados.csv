@@ -1,0 +1,10 @@
+id_sku;cod_barras_ean;descricao;categoria;marca;fornecedor;ncm;preco_custo;lucro;icms;ipi;st;valor_liquido;estoque_atual;estoque_minimo;unidade_medida;peso;largura;altura;profundidade;localizacao;ativo;data_cadastro
+    ;;;;;;;;;;;;;;;;;;;;;;
+1234;;camiseta azul roxo amarelo 345139 rts;Geral;aa;Samsung;;1000.0;0.07;0.0;0.0;0.0;1000.07;0.0;5.0;;;;;;;1.0;11/02/2026
+325010002;;MP-2001 BLOCO ADESIVO ANOTACAO 37,5X50MM NEON 4 CORES 4X100FOLHAS;Geral;MASTERPRINT;Masterprint - Grupomaster - Com. Imp. Exp. Ltda.;;2.89;0.951;0.61815;0.0;0.0;4.45915;0.0;5.0;;;;;;;1.0;11/02/2026
+325010003;;MP-2010 BLOCO ADESIVO ANOTACAO 75X75MM AMARELO 1X100 FOLHAS;Geral;MASTERPRINT;Masterprint - Grupomaster - Com. Imp. Exp. Ltda.;;1.33;0.399;0.26;0.0;0.0;1.989;0.0;5.0;;;;;;;1.0;11/02/2026
+309020001;;MP-612 CANETA MARCA TEXTO AMARELA CAIXA COM 12 CHANFRADA 4MM;Geral;MASTERPRINT;Masterprint - Grupomaster - Com. Imp. Exp. Ltda.;;6.98;2.367;1.54;0.0;0.0;10.887;0.0;5.0;;;;;;;1.0;11/02/2026
+309020002;;MP-612 CANETA MARCA TEXTO LARANJA CAIXA COM 12 CHANFRADA 4MM;Geral;MASTERPRINT;Masterprint - Grupomaster - Com. Imp. Exp. Ltda.;;6.98;2.367;1.54;0.0;0.0;10.887;0.0;5.0;;;;;;;3.0;11/02/2026
+309020003;;MP-612 CANETA MARCA TEXTO ROSA CAIXA COM 12 CHANFRADA 4MM;Geral;MASTERPRINT;Masterprint - Grupomaster - Com. Imp. Exp. Ltda.;;6.98;2.367;1.54;0.0;0.0;10.887;0.0;5.0;;;;;;;3.0;11/02/2026
+309020005;;MP-612 CANETA MARCA TEXTO VERDE CAIXA COM 12 CHANFRADA 4MM;Geral;MASTERPRINT;Masterprint - Grupomaster - Com. Imp. Exp. Ltda.;;6.98;2.367;1.54;0.0;0.0;10.887;0.0;5.0;;;;;;;1.0;11/02/2026
+309020004;;MP-612 CANETA MARCA TEXTO AZUL CAIXA COM 12 CHANFRADA 4MM;Geral;MASTERPRINT;Masterprint - Grupomaster - Com. Imp. Exp. Ltda.;;6.98;2.367;1.54;0.0;0.0;10.887;0.0;5.0;;;;;;;3.0;11/02/2026

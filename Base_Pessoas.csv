@@ -1,0 +1,4 @@
+id_documento;tipo_pessoa;nome_razao;nome_fantasia;rg_ie;email;telefone;cep;endereco;numero;complemento;bairro;cidade;uf;categoria;limite_credito;status;data_cadastro
+06039011904;Física;BRENO OHARA;BRENO OHARA;15075297;ra3909@feitep.edu.br;44920025994;87050020;AV MAUA ;1617;ESQUINA;ZONA 03;MARINGA;PR;Cliente;100000.0;Ativo;11/02/2026
+01149110000182;Jurídica;Masterprint - Grupomaster - Com. Imp. Exp. Ltda.;MASTERPRINT;;;+55 44 3123-4421;87035-510;Rod. Dep. Sílvio Barros;8158;;Parque Industrial 200;Maringá;PR;Fornecedor;1000.0;Ativo;11/02/2026
+05526875000145;Jurídica;UASG 70023 - Tribunal Regional Eleitoral de Goiás;UASG 70023;;;;74003-010;Praça Cívica;300;;Centro;Goiânia;AC;Cliente;0.0;Ativo;11/02/2026

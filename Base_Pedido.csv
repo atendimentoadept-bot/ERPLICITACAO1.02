@@ -1,0 +1,3 @@
+﻿id_pedido;data_pedido;doc_cliente;nome_cliente;sku_item;qtd;valor_final;frete_total;tipo;observacao
+1;11/02/2026 20:04;5526875000145;UASG 70023 - Tribunal Regional Eleitoral de Goiás;309020001;1;12.887;0.0;ORÇAMENTO;
+2;11/02/2026 20:12;5526875000145;UASG 70023 - Tribunal Regional Eleitoral de Goiás;309020001;113;12.887;80.0;COTAÇÃO;90006/2026
